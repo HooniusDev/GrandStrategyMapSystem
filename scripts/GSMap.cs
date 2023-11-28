@@ -29,8 +29,6 @@ public partial class GSMap : Node2D
 					GD.Print($"Territory {n.Name} cleared");
 					n.QueueFree();
 				}
-
-
 				clear_territories = false;
 			}
 		}

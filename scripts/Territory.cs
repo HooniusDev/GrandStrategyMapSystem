@@ -3,18 +3,18 @@ using System;
 [GlobalClass, Tool]
 public partial class Territory : Node2D
 {
-	[Export] private int id;
-	[Export] public Texture2D Mask;
-	[Export] public Texture2D Background;
+	[Export] public int Id;
+	[Export] public Sprite2D Mask;
+	[Export] public Sprite2D Background;
 
 	public Territory()
 	{
-		
+
 	}
 
 	public Territory( int id )
 	{
-		this.id = id;
+		this.Id = id;
 	}
 	
 

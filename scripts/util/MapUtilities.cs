@@ -84,7 +84,8 @@ private Image bgImage;
 			var root = GetTree().EditedSceneRoot;
 			if ( !IsInstanceValid(territory) )
 			{
-				territory = new Territory(i);
+				PackedScene scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
+				territory = scene.Instantiate<Territory>();
 				territory.Name = "Territory" + i.ToString();
 				territories.AddChild(territory);
 				territory.Owner = GetTree().EditedSceneRoot;
@@ -93,7 +94,10 @@ private Image bgImage;
 			{
 				GD.Print($"{territory.Name} Found.");
 			}
-
+			territory.Id = i;
+			territory.Position = offsets[i];
+			territory.Mask.Texture = ImageTexture.CreateFromImage( masks[i] );
+			territory.Background.Texture = ImageTexture.CreateFromImage( backgrounds[i] );
 			
 		}
 	}
@@ -144,9 +148,9 @@ private Image bgImage;
 			{
 				GD.Print("Splitter running");
 				preProcess();
-				updateTerritories();
 				createMaskedImages();
 				cropMaskedImages();
+				updateTerritories();
 				runSplitter = false;
 
 			}
@@ -270,7 +274,7 @@ private Image bgImage;
 			left = MathF.Max( 0, left - 1 );
 			top = MathF.Max( 0, top - 1 );
 			right = MathF.Min( currentMask.GetWidth() - 1, right + 2 );
-			bottom = MathF.Min( currentMask.GetHeight() - 1, right + 2 );
+			bottom = MathF.Min( currentMask.GetHeight() - 1, bottom + 2 );
 
 			float width =  right - left;
 			float height = bottom - top;
@@ -285,6 +289,10 @@ private Image bgImage;
 			Image bgCropped = Image.Create( (int) width, (int) height, false, Image.Format.Rgba8 );
 			bgCropped.BlitRect( backgrounds[i], targetRect, Vector2I.Zero );
 			backgrounds[i] = bgCropped;
+
+			offsets[i] = targetRect.Position;
 		}
 	}
+
+
 }

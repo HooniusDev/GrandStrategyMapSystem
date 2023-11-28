@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "MNzoQ3bE7cXNCHS+0EFSA0mFTY9WWgRx2UU9i+gYelZICyXh5UVP5Uaclbc3IBvAJBlQCYc4XBtogGHZc4YlfQ==",
+  "success": true,
+  "projectFilePath": "E:\\Projects\\GrandStrategyMapSystem\\Grand Strategy Map System.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sagaf\\.nuget\\packages\\godot.sourcegenerators\\4.2.0-rc.2\\godot.sourcegenerators.4.2.0-rc.2.nupkg.sha512",
+    "C:\\Users\\sagaf\\.nuget\\packages\\godotsharp\\4.2.0-rc.2\\godotsharp.4.2.0-rc.2.nupkg.sha512",
+    "C:\\Users\\sagaf\\.nuget\\packages\\godotsharpeditor\\4.2.0-rc.2\\godotsharpeditor.4.2.0-rc.2.nupkg.sha512",
+    "C:\\Users\\sagaf\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.25\\microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\sagaf\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.25\\microsoft.windowsdesktop.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\sagaf\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.25\\microsoft.aspnetcore.app.ref.6.0.25.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dn45b3dbxinhb"]
+
+[ext_resource type="Script" path="res://scripts/Territory.cs" id="1_ng0bk"]
+
+[node name="Territory" type="Node2D"]
+script = ExtResource("1_ng0bk")

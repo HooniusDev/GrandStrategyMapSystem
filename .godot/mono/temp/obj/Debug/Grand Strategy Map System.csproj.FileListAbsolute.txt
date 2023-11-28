@@ -1,0 +1,17 @@
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\bin\Debug\Grand Strategy Map System.deps.json
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\bin\Debug\Grand Strategy Map System.runtimeconfig.json
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\bin\Debug\Grand Strategy Map System.dll
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\bin\Debug\Grand Strategy Map System.pdb
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\bin\Debug\GodotSharp.dll
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\bin\Debug\GodotSharpEditor.dll
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.csproj.AssemblyReference.cache
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.AssemblyInfoInputs.cache
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.AssemblyInfo.cs
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.csproj.CoreCompileInputs.cache
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.csproj.CopyComplete
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.dll
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\refint\Grand Strategy Map System.dll
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.pdb
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.genruntimeconfig.cache
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\ref\Grand Strategy Map System.dll

@@ -1,7 +1,9 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 [Tool]
 public partial class MapUtilities : Node
@@ -21,22 +23,20 @@ public partial class MapUtilities : Node
 [Export] private Godot.Collections.Array<Image> backgrounds;
 [Export] private Godot.Collections.Array<Vector2> offsets;
 private Image colorIdImage;
+private Image bgImage;
 [Export] private Image colorIdImageCopy;
 
 [ExportCategory("Tool")]
 [Export] private bool runSplitter = false;
 [Export] private bool runClear = false;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
 
-	}
 
 	private void preProcess()
 	{
 		GD.Print("PreProcessing..");
 
+		bgImage = backgroundTexture.GetImage();
 		// Duplicate colorId
 		colorIdImage = colorIdTexture.GetImage();
 		colorIdImageCopy = colorIdImage.Duplicate() as Image;
@@ -64,14 +64,37 @@ private Image colorIdImage;
 		masks.Resize(colors.Count);
 		backgrounds.Resize(colors.Count);
 		offsets.Resize(colors.Count);
+
+		for ( int i = 0; i < colors.Count; i++  )
+		{
+			masks[i] = Image.Create( colorIdImage.GetSize().X, colorIdImage.GetSize().Y, false, Image.Format.Rgba8 );
+			backgrounds[i] = Image.Create( colorIdImage.GetSize().X, colorIdImage.GetSize().Y, false, Image.Format.Rgba8 );
+		}
+
 	}
 
 	private void updateTerritories()
 	{
+		GD.Print("Update Territories start.");
 		// Create or update Territory
 		for ( int i = 0; i < colors.Count; i++ )
 		{
-			Territory territory = GetTerritory(i);
+		
+			Territory territory = map.GetTerritory(i);
+			var root = GetTree().EditedSceneRoot;
+			if ( !IsInstanceValid(territory) )
+			{
+				territory = new Territory(i);
+				territory.Name = "Territory" + i.ToString();
+				territories.AddChild(territory);
+				territory.Owner = GetTree().EditedSceneRoot;
+			}
+			else 
+			{
+				GD.Print($"{territory.Name} Found.");
+			}
+
+			
 		}
 	}
 
@@ -108,19 +131,23 @@ private Image colorIdImage;
 		return false;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	private bool isTransparent(Color color)
+	{
+		return color.A < 0.01;
+	}
+
 	public override void _Process(double delta)
 	{
 		if (Engine.IsEditorHint())
 		{
 			if (runSplitter && colorIdTexture != null && backgroundTexture != null)
 			{
-				GD.Print("Splitter runing");
+				GD.Print("Splitter running");
 				preProcess();
 				updateTerritories();
+				createMaskedImages();
+				cropMaskedImages();
 				runSplitter = false;
-
-				
 
 			}
 
@@ -133,17 +160,131 @@ private Image colorIdImage;
 		}
 	}
 
-	private Territory GetTerritory( int id )
+	// Creates masked image per colorID
+	private void createMaskedImages()
 	{
-		if ( id > territories.GetChildCount() )
+		GD.Print("createMaskedImages");
+		for ( int y = 0; y < colorIdImage.GetHeight(); y++ )
 		{
-			var scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
-			Territory territory = scene.Instantiate<Territory>();
-			territory.Name = "Territory" + id.ToString();
-			territory.Owner = GetTree().EditedSceneRoot;
-			territories.AddChild(territory);
-			return territory;
+			for ( int x = 0; x < colorIdImage.GetWidth(); x++ )
+			{
+				Color color = colorIdImage.GetPixel(x,y);
+				int id = getId(color);
+
+				if (isTransparent(color)) continue;
+
+				for ( int i = 0; i < specialColors.Count; i++)
+				{
+					if ( isSpecialColor(color) )
+					{
+						// Replace special color by pixel on the right side
+						Color rPixel = colorIdImage.GetPixel( x + 1,y );
+						colorIdImageCopy.SetPixel(x,y, rPixel);
+						// Mask to white
+						masks[i].SetPixel(x,y, Colors.White);
+						// Background 
+						Color bg = bgImage.GetPixel(x,y);
+						backgrounds[i].SetPixel(x,y,bg);
+						continue;
+					}
+				} 
+				masks[id].SetPixel(x,y, Colors.White);
+				Color bgPixel = bgImage.GetPixel(x,y);
+				backgrounds[id].SetPixel(x,y, bgPixel);
+			}
 		}
-		return territories.GetChild(id) as Territory;
+	/*
+	# Do a second pass to add transparent pixels border pixels to bg's
+	for y in source.get_height():
+		for x in source.get_width():
+			var color = source.get_pixel( x, y )
+			if color.a > 0.1:
+				continue
+			if x > 0: # left
+				var id = get_id_by_color( source.get_pixel( x - 1, y ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if x < source.get_width() - 1: #right
+				var id = get_id_by_color( source.get_pixel( x + 1, y ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if y > 0: # top
+				var id = get_id_by_color( source.get_pixel( x, y - 1 ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if y < source.get_height() - 1: # down
+				var id = get_id_by_color( source.get_pixel( x, y + 1 ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if x > 0 and y < source.get_height() - 1: # topleft
+				var id = get_id_by_color( source.get_pixel( x - 1, y + 1 ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if x > 0 and y > 0: # downleft
+				var id = get_id_by_color( source.get_pixel( x - 1, y - 1 ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if x < source.get_width() - 1 and y > 0: # downright
+				var id = get_id_by_color( source.get_pixel( x + 1, y - 1 ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+			if x < source.get_width() - 1 and y < source.get_height() - 1: # upright
+				var id = get_id_by_color( source.get_pixel( x + 1, y + 1 ) )
+				if id != -1: # There is a color
+					backgrounds[id].set_pixel(x,y, bg_image.get_pixel( x, y))
+	*/	
+	
+	}
+
+	private void cropMaskedImages()
+	{
+		//## TODO: 
+		//## Handle colored background image cropping
+		//## Adjustable radius
+		//## Multiple Layers? Someday maybe
+
+		for ( int i = 0; i < colors.Count; i++  )
+		{
+			Image currentMask = masks[i];
+
+			float left = currentMask.GetWidth();
+			float top = currentMask.GetHeight();
+			float right = 0;
+			float bottom = 0;
+
+			for ( int y = 0; y < currentMask.GetHeight(); y++ )
+			{
+				for ( int x = 0; x < currentMask.GetWidth(); x++ )
+				{
+					Color color = currentMask.GetPixel(x,y);
+					if ( color.IsEqualApprox(Colors.White) )
+					{
+						left = MathF.Min( left, x );
+						right = MathF.Max( right, x );
+						top = MathF.Min( top, y );
+						bottom = MathF.Max( bottom, y );
+					}
+				}
+			}
+			// Expand the cropped image by 1 pixel respecting the image bounds
+			left = MathF.Max( 0, left - 1 );
+			top = MathF.Max( 0, top - 1 );
+			right = MathF.Min( currentMask.GetWidth() - 1, right + 2 );
+			bottom = MathF.Min( currentMask.GetHeight() - 1, right + 2 );
+
+			float width =  right - left;
+			float height = bottom - top;
+			Rect2I targetRect = new Rect2I( (int) left, (int) top, (int) width, (int) height );
+
+			// Mask
+			Image maskCropped = Image.Create( (int) width, (int) height, false, Image.Format.Rgba8 );
+			maskCropped.BlitRect( currentMask, targetRect, Vector2I.Zero );
+			masks[i] = maskCropped;
+
+			// Bg
+			Image bgCropped = Image.Create( (int) width, (int) height, false, Image.Format.Rgba8 );
+			bgCropped.BlitRect( backgrounds[i], targetRect, Vector2I.Zero );
+			backgrounds[i] = bgCropped;
+		}
 	}
 }

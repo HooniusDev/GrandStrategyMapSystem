@@ -1,1 +1,3 @@
-res://scenes/map.tscn
+res://scripts/GSMap.cs
+res://scripts/Territory.cs
+res://scripts/util/MapUtilities.cs

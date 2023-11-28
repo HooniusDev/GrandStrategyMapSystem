@@ -15,3 +15,4 @@ E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\refint\Grand Strat
 E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.pdb
 E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.genruntimeconfig.cache
 E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\ref\Grand Strategy Map System.dll
+E:\Projects\GrandStrategyMapSystem\.godot\mono\temp\obj\Debug\Grand Strategy Map System.sourcelink.json

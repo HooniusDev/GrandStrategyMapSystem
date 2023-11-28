@@ -1,0 +1,2 @@
+﻿55247
+E:/godot/mono/latest/Godot.exe

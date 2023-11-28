@@ -275,7 +275,7 @@ private Image bgImage;
 			top = MathF.Max( 0, top - 1 );
 			right = MathF.Min( currentMask.GetWidth() - 1, right + 2 );
 			bottom = MathF.Min( currentMask.GetHeight() - 1, bottom + 2 );
-
+			// NOT CREATED RIGHT FOR REGIONS AT BOTTOM
 			float width =  right - left;
 			float height = bottom - top;
 			Rect2I targetRect = new Rect2I( (int) left, (int) top, (int) width, (int) height );

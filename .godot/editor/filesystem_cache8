@@ -1,10 +1,10 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1701161291
+::res://::1701164599
 icon.svg::CompressedTexture2D::1930145962687225572::1701069753::1701069771::1::::<><>::
 README.md::TextFile::-1::1701156700::0::1::::<><>::
 ::res://assets/::1701074308
 ::res://assets/sprites/::1701076326
-::res://assets/sprites/debug16/::1701076626
+::res://assets/sprites/debug16/::1701161573
 debug16-colorid.png::CompressedTexture2D::8546886860414327982::1699337122::1701076437::1::::<><>::
 debug16-map.png::CompressedTexture2D::109718387325903185::1701161571::1701161573::1::::<><>::
 debug16-specials.png::CompressedTexture2D::5935282293706171051::1699337158::1701076467::1::::<><>::
@@ -34,11 +34,11 @@ North_and_South-2.png::CompressedTexture2D::8424075725110775388::1701074334::170
 OIP (1).jpg::CompressedTexture2D::172738408980745872::1701074334::1701074334::1::::<><>::
 OIP.jpg::CompressedTexture2D::5113283572816901735::1701074334::1701074334::1::::<><>::
 parchment_map_template.jpg::CompressedTexture2D::8553651492175270855::1701074334::1701074335::1::::<><>::
-::res://scenes/::1701158750
-map.tscn::PackedScene::388660662655528655::1701158750::0::1::::<><>::res://scripts/GSMap.cs<>res://scripts/util/MapUtilities.cs<>uid://dt1f8ion4rn5g::::res://assets/sprites/debug16/debug16-colorid.png<>uid://btfbs7qqpoa8::::res://assets/sprites/debug16/debug16-map.png
-territory.tscn::PackedScene::8133408744183074611::1701158750::0::1::::<><>::res://scripts/Territory.cs
+::res://scenes/::1701165008
+map.tscn::PackedScene::388660662655528655::1701164914::0::1::::<><>::res://scripts/GSMap.cs<>res://scripts/util/MapUtilities.cs<>uid://dt1f8ion4rn5g::::res://assets/sprites/debug16/debug16-colorid.png<>uid://btfbs7qqpoa8::::res://assets/sprites/debug16/debug16-map.png<>res://scripts/Territory.cs<>uid://dn45b3dbxinhb::::res://scenes/territory.tscn
+territory.tscn::PackedScene::8133408744183074611::1701165008::0::1::::<><>::res://scripts/Territory.cs
 ::res://scripts/::1701083218
-GSMap.cs::CSharpScript::-1::1701158573::0::1::::GSMap<>Node2D<>::
-Territory.cs::CSharpScript::-1::1701161488::0::1::::Territory<>Node2D<>::
+GSMap.cs::CSharpScript::-1::1701163441::0::1::::GSMap<>Node2D<>::
+Territory.cs::CSharpScript::-1::1701164110::0::1::::Territory<>Node2D<>::
 ::res://scripts/util/::1701072492
-MapUtilities.cs::CSharpScript::-1::1701161273::0::1::::<>Node<>::
+MapUtilities.cs::CSharpScript::-1::1701164828::0::1::::<>Node<>::

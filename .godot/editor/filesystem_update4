@@ -3,3 +3,5 @@ res://scripts/Territory.cs
 res://scripts/util/MapUtilities.cs
 res://scenes/map.tscn
 res://scenes/territory.tscn
+res://assets/shaders/outline.gdshader
+res://assets/shaders/rim.gdshader

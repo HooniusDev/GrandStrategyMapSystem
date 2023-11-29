@@ -14,6 +14,15 @@ public partial class GSMap : Node2D
 	{
 		//GD.Print("Helou");
 	}
+	
+	public void Clear()
+	{
+		foreach ( Node n in territories.GetChildren() )
+		{
+			GD.Print($"Territory {n.Name} cleared");
+			n.QueueFree();
+		}
+	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -24,11 +33,7 @@ public partial class GSMap : Node2D
 			{
 				GD.Print("clear_territories");
 
-				foreach ( Node n in territories.GetChildren() )
-				{
-					GD.Print($"Territory {n.Name} cleared");
-					n.QueueFree();
-				}
+				Clear();
 				clear_territories = false;
 			}
 		}

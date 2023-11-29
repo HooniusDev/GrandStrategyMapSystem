@@ -13,8 +13,27 @@ public partial class MapUtilities : Node
 [Export] private Node2D territories;
 
 [ExportCategory("Inputs")]
-[Export] private Texture2D colorIdTexture;
-[Export] private Texture2D backgroundTexture;
+private Texture2D colorIdTexture;
+[Export] public Texture2D ColorIdTexture
+{
+	get { return colorIdTexture; }
+	set 
+	{
+		colorIdTexture = value;
+		UpdateConfigurationWarnings();
+	}
+}
+
+private Texture2D backgroundTexture;
+[Export] public Texture2D BackgroundTexture
+{
+	get { return backgroundTexture; }
+	set 
+	{
+		backgroundTexture = value;
+		UpdateConfigurationWarnings();
+	}
+}
 [Export] private Godot.Collections.Array<Color> specialColors;
 
 [ExportCategory("DEBUG")]
@@ -79,7 +98,6 @@ private Image bgImage;
 		// Create or update Territory
 		for ( int i = 0; i < colors.Count; i++ )
 		{
-		
 			Territory territory = map.GetTerritory(i);
 			var root = GetTree().EditedSceneRoot;
 			if ( !IsInstanceValid(territory) )
@@ -89,12 +107,15 @@ private Image bgImage;
 				territory.Name = "Territory" + i.ToString();
 				territories.AddChild(territory);
 				territory.Owner = GetTree().EditedSceneRoot;
+				territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
+				GD.Print($"{territory.Name} Created.");
 			}
 			else 
 			{
-				GD.Print($"{territory.Name} Found.");
+				GD.Print($"{territory.Name} Updating.");
+				territory.UpdateData(i, masks[i], backgrounds[i], colors[i], offsets[i]);
+				
 			}
-			territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
 		}
 	}
 
@@ -142,6 +163,10 @@ private Image bgImage;
 		{
 			if (runSplitter && colorIdTexture != null && backgroundTexture != null)
 			{
+				if (colorIdTexture.GetSize() != backgroundTexture.GetSize())
+				{
+					runSplitter = false;
+				}
 				GD.Print("Splitter running");
 				preProcess();
 				createMaskedImages();
@@ -154,7 +179,8 @@ private Image bgImage;
 			if (runClear)
 			{
 				clear();
-				GD.Print("clearArrays run");
+				//map.Clear();
+				GD.Print("Clearing Arrays...");
 				runClear = false;
 			}
 		}
@@ -169,7 +195,6 @@ private Image bgImage;
 			for ( int x = 0; x < colorIdImage.GetWidth(); x++ )
 			{
 				Color color = colorIdImage.GetPixel(x,y);
-				int id = getId(color);
 
 				if (isTransparent(color)) continue;
 
@@ -178,8 +203,8 @@ private Image bgImage;
 					if ( isSpecialColor(color) )
 					{
 						// Replace special color by pixel on the right side
-						Color rPixel = colorIdImage.GetPixel( x + 1,y );
-						colorIdImageCopy.SetPixel(x,y, rPixel);
+						color = colorIdImage.GetPixel( x + 1, y );
+						colorIdImageCopy.SetPixel(x,y, color);
 						// Mask to white
 						masks[i].SetPixel(x,y, Colors.White);
 						// Background 
@@ -188,6 +213,12 @@ private Image bgImage;
 						continue;
 					}
 				} 
+
+				int id = getId(color);
+				/* 
+				if (id == -1)
+					GD.Print( $"{x}, {y} id: {id}" );
+				 */
 				masks[id].SetPixel(x,y, Colors.White);
 				Color bgPixel = bgImage.GetPixel(x,y);
 				backgrounds[id].SetPixel(x,y, bgPixel);
@@ -290,5 +321,14 @@ private Image bgImage;
 		}
 	}
 
-
+	public override string[] _GetConfigurationWarnings()
+	{
+		var warnings = new Godot.Collections.Array<string>();
+		if (colorIdTexture.GetSize() != backgroundTexture.GetSize())
+		{
+			//GD.PrintErr( "ColorId Texture and Background Texture must be same size" );
+            warnings.Add("ColorId Texture and Background Texture must be same size");
+		}
+		return warnings.ToArray();
+	}
 }

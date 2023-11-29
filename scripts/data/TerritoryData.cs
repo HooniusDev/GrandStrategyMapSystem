@@ -7,21 +7,32 @@ public partial class TerritoryData : Resource
     [Export] public int ID { get; private set; }
     [Export] public Image Mask { get; private set; }
     [Export] public Image Bg { get; private set; }
-    [Export] public Vector2I Offset { get; private set; }
-    [Export] private Color Color;
+    [Export] public Color Color{ get; private set; }
+
     public TerritoryData()
     {
         ID = -1;
-        Offset = Vector2I.Zero;
     }
-    public TerritoryData( int id, Image mask, Image bg, Color color, Vector2I offset )
+    public TerritoryData( int id, Image mask, Image bg, Color color)
     {
         ID = id;
         Mask = mask;
         Bg = bg;
         Color = color;
-        Offset = offset; 
         GD.Print( $"TerritoryData {ID} Created" );
     }
 
+    	public void Update( int id, Image mask, Image bg, Color color )
+	{
+		if (ID != id )
+		{
+			GD.PrintErr( $"ID mismatch on {ID}.UpdateData()" );
+		}
+		if ( !Color.IsEqualApprox(color) )
+		{
+			GD.PrintErr( $"Color mismatch on {ID}.UpdateData()" );
+		}
+        Mask = mask;
+        Bg = bg;
+	}
 }

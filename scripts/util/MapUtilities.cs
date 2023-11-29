@@ -21,7 +21,7 @@ public partial class MapUtilities : Node
 [Export] private Godot.Collections.Array<Color> colors;
 [Export] private Godot.Collections.Array<Image> masks;
 [Export] private Godot.Collections.Array<Image> backgrounds;
-[Export] private Godot.Collections.Array<Vector2> offsets;
+[Export] private Godot.Collections.Array<Vector2I> offsets;
 private Image colorIdImage;
 private Image bgImage;
 [Export] private Image colorIdImageCopy;
@@ -75,7 +75,7 @@ private Image bgImage;
 
 	private void updateTerritories()
 	{
-		GD.Print("Update Territories start.");
+		GD.Print("Updating Territories..");
 		// Create or update Territory
 		for ( int i = 0; i < colors.Count; i++ )
 		{
@@ -94,11 +94,7 @@ private Image bgImage;
 			{
 				GD.Print($"{territory.Name} Found.");
 			}
-			territory.Id = i;
-			territory.Position = offsets[i];
-			territory.Mask.Texture = ImageTexture.CreateFromImage( masks[i] );
-			territory.Background.Texture = ImageTexture.CreateFromImage( backgrounds[i] );
-			
+			territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
 		}
 	}
 
@@ -167,7 +163,7 @@ private Image bgImage;
 	// Creates masked image per colorID
 	private void createMaskedImages()
 	{
-		GD.Print("createMaskedImages");
+		GD.Print("creating Masked Images..");
 		for ( int y = 0; y < colorIdImage.GetHeight(); y++ )
 		{
 			for ( int x = 0; x < colorIdImage.GetWidth(); x++ )
@@ -251,10 +247,10 @@ private Image bgImage;
 		{
 			Image currentMask = masks[i];
 
-			float left = currentMask.GetWidth();
-			float top = currentMask.GetHeight();
-			float right = 0;
-			float bottom = 0;
+			int left = currentMask.GetWidth();
+			int top = currentMask.GetHeight();
+			int right = 0;
+			int bottom = 0;
 
 			for ( int y = 0; y < currentMask.GetHeight(); y++ )
 			{
@@ -263,21 +259,21 @@ private Image bgImage;
 					Color color = currentMask.GetPixel(x,y);
 					if ( color.IsEqualApprox(Colors.White) )
 					{
-						left = MathF.Min( left, x );
-						right = MathF.Max( right, x );
-						top = MathF.Min( top, y );
-						bottom = MathF.Max( bottom, y );
+						left = (int) MathF.Min( left, x );
+						right = (int) MathF.Max( right, x );
+						top = (int) MathF.Min( top, y );
+						bottom = (int) MathF.Max( bottom, y );
 					}
 				}
 			}
 			// Expand the cropped image by 1 pixel respecting the image bounds
-			left = MathF.Max( 0, left - 1 );
-			top = MathF.Max( 0, top - 1 );
-			right = MathF.Min( currentMask.GetWidth() - 1, right + 2 );
-			bottom = MathF.Min( currentMask.GetHeight() - 1, bottom + 2 );
-			// NOT CREATED RIGHT FOR REGIONS AT BOTTOM
-			float width =  right - left;
-			float height = bottom - top;
+			left = (int) MathF.Max( 0, left - 1 );
+			top = (int) MathF.Max( 0, top - 1 );
+			right = (int) MathF.Min( currentMask.GetWidth() , right + 2 );
+			bottom = (int) MathF.Min( currentMask.GetWidth() , bottom + 2 );
+
+			int width =  right - left;
+			int height = bottom - top;
 			Rect2I targetRect = new Rect2I( (int) left, (int) top, (int) width, (int) height );
 
 			// Mask

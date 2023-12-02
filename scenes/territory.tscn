@@ -5,8 +5,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b0yso"]
 shader = ExtResource("2_0flvq")
-shader_parameter/outline_color = Color(0.0745098, 0.0666667, 0.0666667, 0.407843)
-shader_parameter/fill_color = Color(1, 1, 1, 0.407843)
+shader_parameter/outline_color = Color(0.882353, 0.870588, 0.870588, 0.611765)
+shader_parameter/fill_color = Color(0.870588, 0.870588, 0.870588, 0.286275)
 
 [node name="Territory" type="Node2D"]
 script = ExtResource("1_ng0bk")

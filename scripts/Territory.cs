@@ -15,12 +15,14 @@ public partial class Territory : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public void Create( int id, Image mask, Image bg, Color color, Vector2I offset )
 	{
-		GD.Print($"{Name} entered the play");
+		GD.Print($"{Name} Created");
 		data = new( id, mask, bg, color );
 		this.mask = GetNode<Sprite2D>("Mask");
 		this.mask.Texture = ImageTexture.CreateFromImage( mask );
+		this.mask.Owner = GetTree().EditedSceneRoot;
 		this.bg = GetNode<Sprite2D>("Bg");
 		this.bg.Texture = ImageTexture.CreateFromImage( bg );
+		this.bg.Owner = GetTree().EditedSceneRoot;
 		Position = offset;
 	}
 
@@ -38,6 +40,7 @@ public partial class Territory : Node2D
 
 	public void UpdateData( int id, Image mask, Image bg, Color color, Vector2I offset )
 	{
+		//GD.Print($"{Name} Updating.");
 		data.Update(id, mask, bg, color);
 		Position = offset;
 	}

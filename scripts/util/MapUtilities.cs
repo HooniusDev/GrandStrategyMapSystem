@@ -79,6 +79,9 @@ private Image bgImage;
 		}
 		GD.Print($"Found {colors.Count} Color regions.");
 
+		// TODO
+		// Create warning if special colors are not present in image
+
 		// Initialize debug arrays to the size
 		masks.Resize(colors.Count);
 		backgrounds.Resize(colors.Count);
@@ -108,11 +111,11 @@ private Image bgImage;
 				territories.AddChild(territory);
 				territory.Owner = GetTree().EditedSceneRoot;
 				territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
-				GD.Print($"{territory.Name} Created.");
+				//GD.Print($"{territory.Name} Created.");
 			}
 			else 
 			{
-				GD.Print($"{territory.Name} Updating.");
+				//GD.Print($"{territory.Name} Updating.");
 				territory.UpdateData(i, masks[i], backgrounds[i], colors[i], offsets[i]);
 				
 			}
@@ -172,6 +175,7 @@ private Image bgImage;
 				createMaskedImages();
 				cropMaskedImages();
 				updateTerritories();
+				map.colors = colors;
 				runSplitter = false;
 
 			}
@@ -297,17 +301,23 @@ private Image bgImage;
 					}
 				}
 			}
+			GD.Print( $"territory mask {i} width: {right - left} height: {bottom - top}"  );
 			// Expand the cropped image by 1 pixel respecting the image bounds
 			left = (int) MathF.Max( 0, left - 1 );
 			top = (int) MathF.Max( 0, top - 1 );
 			right = (int) MathF.Min( currentMask.GetWidth() , right + 2 );
-			bottom = (int) MathF.Min( currentMask.GetWidth() , bottom + 2 );
+			bottom = (int) MathF.Min( currentMask.GetHeight() , bottom + 2 );
 
 			int width =  right - left;
 			int height = bottom - top;
 			Rect2I targetRect = new Rect2I( (int) left, (int) top, (int) width, (int) height );
-
+			GD.Print( $"territory mask {i} rect: {targetRect}" );
 			// Mask
+			if (targetRect.Size.Y == 0) 
+			{
+				GD.PrintErr("Width 0");
+				continue;
+			}
 			Image maskCropped = Image.Create( (int) width, (int) height, false, Image.Format.Rgba8 );
 			maskCropped.BlitRect( currentMask, targetRect, Vector2I.Zero );
 			masks[i] = maskCropped;

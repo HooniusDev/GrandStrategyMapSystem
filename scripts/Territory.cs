@@ -17,13 +17,22 @@ public partial class Territory : Node2D
 	{
 		GD.Print($"{Name} Created");
 		data = new( id, mask, bg, color );
-		this.mask = GetNode<Sprite2D>("Mask");
+		this.mask = new Sprite2D();
+		//this.mask = GetNode<Sprite2D>("Mask");
 		this.mask.Texture = ImageTexture.CreateFromImage( mask );
+		this.mask.Name = "Mask";
+		this.mask.Centered = false;
+		AddChild(this.mask);
 		this.mask.Owner = GetTree().EditedSceneRoot;
-		this.bg = GetNode<Sprite2D>("Bg");
+		this.bg = new Sprite2D();
+		//this.bg = GetNode<Sprite2D>("Bg");
 		this.bg.Texture = ImageTexture.CreateFromImage( bg );
+		this.bg.Name = "Bg";
+		this.bg.Centered = false;
+		AddChild(this.bg);
 		this.bg.Owner = GetTree().EditedSceneRoot;
 		Position = offset;
+		SetMeta("_edit_group_", true);
 	}
 
 

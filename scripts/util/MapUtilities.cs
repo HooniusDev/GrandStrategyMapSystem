@@ -105,11 +105,13 @@ private Image bgImage;
 			var root = GetTree().EditedSceneRoot;
 			if ( !IsInstanceValid(territory) )
 			{
-				PackedScene scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
-				territory = scene.Instantiate<Territory>();
+				territory = new Territory();
 				territory.Name = "Territory" + i.ToString();
 				territories.AddChild(territory);
 				territory.Owner = GetTree().EditedSceneRoot;
+
+				//PackedScene scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
+				//territory = scene.Instantiate<Territory>();
 				territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
 				//GD.Print($"{territory.Name} Created.");
 			}

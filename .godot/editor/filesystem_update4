@@ -9,3 +9,4 @@ res://scripts/util/Input.cs
 res://scripts/util/MapUtilities.cs
 res://assets/shaders/hover_material.tres
 res://assets/shaders/territory_hover_material.tres
+res://scenes/fantasymap_test.tscn

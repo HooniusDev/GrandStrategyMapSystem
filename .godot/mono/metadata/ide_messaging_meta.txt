@@ -1,2 +1,0 @@
-﻿55686
-E:/godot/mono/latest/Godot.exe

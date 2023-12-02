@@ -27,7 +27,7 @@ public partial class Input : StaticBody2D
 			{
 				enterHover.GetNode<Sprite2D>("Mask").Visible = true;
 				enterHover.GetNode<Sprite2D>("Mask").Material = HOVER_MATERIAL;
-				enterHover.GetNode<Sprite2D>("Mask").ZIndex = 1;
+				enterHover.GetNode<Sprite2D>("Mask").ZIndex = 10;
 			}
 			Territory exitHover = map.GetTerritory(hoverId); //world_map.get_territory_by_id(new_hover_id)
 			if ( IsInstanceValid( exitHover ))

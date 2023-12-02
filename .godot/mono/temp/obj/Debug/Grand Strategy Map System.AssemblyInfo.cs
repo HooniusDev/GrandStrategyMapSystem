@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Grand Strategy Map System")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b315f9b3797d945ba7ae9e03018ba6e94765707c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a5223081343cf6aec0968a71269552ba1b5acd16")]
 [assembly: System.Reflection.AssemblyProductAttribute("Grand Strategy Map System")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Grand Strategy Map System")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

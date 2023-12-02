@@ -9,6 +9,9 @@ public partial class GSMap : Node2D
 	[Export] public Godot.Collections.Array<Color> colors;
 
 	[Export] private bool clear_territories = false;
+	[Export] private bool toggleBackgrounds = false;
+	[Export] private bool toggleMasks = false;
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -36,6 +39,16 @@ public partial class GSMap : Node2D
 
 				Clear();
 				clear_territories = false;
+			}
+			if (toggleBackgrounds == true)
+			{
+				ToggleTerritoryBgVisibility();
+				toggleBackgrounds = false;
+			}
+				if (toggleMasks == true)
+			{
+				ToggleTerritoryMaskVisibility();
+				toggleMasks = false;
 			}
 		}
 	}
@@ -75,5 +88,21 @@ public partial class GSMap : Node2D
 	public Rect2 GetMapRect()
 	{
 		return GetNode<Sprite2D>("MapColorID").GetRect();
+	}
+
+	private void ToggleTerritoryBgVisibility()
+	{
+		foreach ( Territory t in territories.GetChildren() )
+		{
+			t.ToggleBgVisible();
+		}
+	}
+
+	private void ToggleTerritoryMaskVisibility()
+	{
+		foreach ( Territory t in territories.GetChildren() )
+		{
+			t.ToggleMaskVisible();
+		}
 	}
 }

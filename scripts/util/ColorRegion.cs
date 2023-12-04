@@ -10,6 +10,12 @@ using System.Net;
     Bg 
     Offsets
     that were used in MapUtilities.cs
+
+    Dont yet know how this relates to TerritoryData Resource as they 
+    are pretty similar.
+    Maybe this will be more of a editor side that can manage TerritoryData
+    objects images etc.. 
+
  */
 
 
@@ -39,11 +45,6 @@ public partial class ColorRegion : Resource
     {
         bitmap.SetBit( x,y, add );
         rect = rect.Expand( new Vector2I(x,y) );
-    }
-
-    static ColorRegion(  )
-    {
-
     }
 
     public ColorRegion()

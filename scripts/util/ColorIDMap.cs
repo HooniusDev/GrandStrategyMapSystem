@@ -1,6 +1,10 @@
 using Godot;
 using System;
 using System.Linq;
+/* 
+	Replaces MapUtilities.
+	Takes advantage of ColorRegion.cs Resource to encapsulate things
+ */
 
 [Tool]
 public partial class ColorIDMap : Node

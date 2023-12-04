@@ -3,6 +3,16 @@ using System;
 using System.Collections;
 using System.Net;
 
+/* 
+    Resource class to manage color region of ColorIDMap
+    Encapsulates things like  
+    Mask
+    Bg 
+    Offsets
+    that were used in MapUtilities.cs
+ */
+
+
 [Tool]
 public partial class ColorRegion : Resource
 {

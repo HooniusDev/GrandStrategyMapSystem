@@ -37,14 +37,70 @@ public partial class ColorRegion : Resource
         set { id = value; }
     }
 
-    [Export] private Bitmap bitmap;
+    [Export] private Godot.Collections.Array<Vector2I> specialLocations;
 
+    [Export] private Bitmap bitmap;
+    //[Export] private Bitmap croppedBitmap;
     [Export] private Image bg;
+    [Export] private Image mask;
 
     public void SetBit( int x, int y, bool add = true )
     {
         bitmap.SetBit( x,y, add );
         rect = rect.Expand( new Vector2I(x,y) );
+    }
+
+    public void AddSpecialLocation( Vector2I pos )
+    {
+        specialLocations.Add( pos );
+    }
+
+    public Vector2I GetPosition()
+    {
+        return rect.Position;
+    } 
+
+    public ImageTexture GetMask()
+    {
+        return ImageTexture.CreateFromImage( mask );
+    }
+
+    public void cropMask( Image source )
+    {
+        Bitmap croppedBitmap = new();
+        Vector2I end = rect.End;
+        rect.End = end + Vector2I.One;
+        croppedBitmap.Create( rect.Size );
+
+        bg = new Image();
+        bg = Image.Create( rect.Size.X, rect.Size.Y, false, Image.Format.Rgba8 );
+        mask = new Image();
+        mask = Image.Create( rect.Size.X, rect.Size.Y, false, Image.Format.Rgba8 );
+
+        for ( int y = 0; y < bitmap.GetSize().Y; y++ )
+		{
+			for ( int x = 0; x < bitmap.GetSize().X; x++ )
+            {
+                var sourceBit = bitmap.GetBit(x,y);
+                
+                if (rect.HasPoint( new Vector2I( x,y )))
+                {
+                    croppedBitmap.SetBitv( new Vector2I(x,y) -  rect.Position, sourceBit );
+                    if ( sourceBit )
+                    {
+                        var sourcePixel = source.GetPixel(x,y);
+                        bg.SetPixelv( new Vector2I(x,y) -  rect.Position , sourcePixel);
+                        mask.SetPixelv( new Vector2I(x,y) -  rect.Position , Colors.White);
+                    }
+                    else
+                    {
+                        mask.SetPixelv( new Vector2I(x,y) -  rect.Position , Colors.Transparent);
+                    }
+                }
+
+            }
+        }
+        bitmap = croppedBitmap;
     }
 
     public ColorRegion()
@@ -63,9 +119,8 @@ public partial class ColorRegion : Resource
         bitmap = new();
         bitmap.Create( sourceSize );
         rect = new Rect2I( firstPixel, Vector2I.Zero );
+        specialLocations = new();
     }
-
-    // Set Pixel should update the rect
 
 
 }

@@ -1,36 +1,33 @@
-[gd_scene load_steps=9 format=3 uid="uid://fsjgjc5xkkbf"]
+[gd_scene load_steps=7 format=3 uid="uid://fsjgjc5xkkbf"]
 
 [ext_resource type="Script" path="res://scripts/GSMap.cs" id="1_6tusb"]
 [ext_resource type="Script" path="res://scripts/util/ColorIDMap.cs" id="2_4vi86"]
 [ext_resource type="Texture2D" uid="uid://dt1f8ion4rn5g" path="res://assets/sprites/debug16/debug16-colorid.png" id="3_1rplq"]
-[ext_resource type="Texture2D" uid="uid://b0e3do4mjudnn" path="res://assets/sprites/fantasy_template/map_template-colorid.png" id="3_k1ovi"]
-[ext_resource type="Texture2D" uid="uid://bdl58lfgjefm6" path="res://assets/sprites/fantasy_template/map_template.png" id="4_5mmux"]
 [ext_resource type="Texture2D" uid="uid://btfbs7qqpoa8" path="res://assets/sprites/debug16/debug16-map.png" id="4_f4d1k"]
 [ext_resource type="Script" path="res://scripts/util/Input.cs" id="5_y0dwf"]
 [ext_resource type="Material" uid="uid://belaydrl2i3uv" path="res://assets/shaders/territory_hover_material.tres" id="6_my2n2"]
 
-[node name="Map" type="Node2D" node_paths=PackedStringArray("territories")]
+[node name="Map" type="Node2D" node_paths=PackedStringArray("Territories")]
 script = ExtResource("1_6tusb")
-territories = NodePath("Territories")
+Territories = NodePath("Territories")
 colors = []
 
 [node name="Utilities" type="Node" parent="."]
 script = ExtResource("2_4vi86")
 ColorIdTexture = ExtResource("3_1rplq")
 BackgroundTexture = ExtResource("4_f4d1k")
-specialColors = []
+specialColors = [Color(1, 0, 0, 1)]
 colorsRegions = []
 
 [node name="MapBg" type="Sprite2D" parent="."]
-visible = false
 z_index = -1
-texture = ExtResource("4_5mmux")
+texture = ExtResource("4_f4d1k")
 centered = false
 
 [node name="MapColorID" type="Sprite2D" parent="."]
 visible = false
 z_index = 15
-texture = ExtResource("3_k1ovi")
+texture = ExtResource("3_1rplq")
 centered = false
 
 [node name="Input" type="StaticBody2D" parent="."]
@@ -39,6 +36,8 @@ script = ExtResource("5_y0dwf")
 HOVER_MATERIAL = ExtResource("6_my2n2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Input"]
+
+[node name="TerritoryHover" type="Sprite2D" parent="Input"]
 
 [node name="Territories" type="Node2D" parent="."]
 

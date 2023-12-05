@@ -54,9 +54,11 @@ private Image bgImage;
 				}
 				GD.Print("Splitter running");
 				preProcess();
-				//createMaskedImages();
-				//cropMaskedImages();
-				//updateTerritories();
+				for ( int i = 0; i < colorsRegions.Count; i++ )
+				{
+					colorsRegions[i].cropMask(BackgroundTexture.GetImage());
+				}
+				updateTerritories();
 				//map.colors = colors;
 				runSplitter = false;
 
@@ -72,12 +74,39 @@ private Image bgImage;
 		}
 	}
 
+	private void updateTerritories()
+	{
+		GD.Print("Updating Territories..");
+		// Create or update Territory
+		for ( int i = 0; i < colorsRegions.Count; i++ )
+		{
+			Territory territory = GetParent<GSMap>().GetTerritory(i);
+			var root = GetTree().EditedSceneRoot;
+			if ( !IsInstanceValid(territory) )
+			{
+				territory = new Territory();
+				territory.Name = "Territory" + i.ToString();
+				GetParent<GSMap>().Territories.AddChild(territory);
+				territory.Owner = GetTree().EditedSceneRoot;
+
+				//PackedScene scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
+				//territory = scene.Instantiate<Territory>();
+				//territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
+				GD.Print($"{territory.Name} Created.");
+				territory.Create( colorsRegions[i] );
+			}
+			else 
+			{
+				GD.Print($"{territory.Name} Updating.");
+				//territory.UpdateData(i, masks[i], backgrounds[i], colors[i], offsets[i]);
+				
+			}
+		}
+	}
+
 	private void clear()
 	{
 		colorsRegions = new();
-/* 		masks = new();
-		backgrounds = new();
-		offsets = new(); */
 
 		colorIdImageCopy = null;
 	}
@@ -113,6 +142,7 @@ private Image bgImage;
 					{
 						int id = getId(prevColor);
 						colorsRegions[id].SetBit( x,y );
+						colorsRegions[id].AddSpecialLocation( new Vector2I(x,y) );
 					}
 					else
 					{

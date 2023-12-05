@@ -5,7 +5,7 @@ using System;
 public partial class GSMap : Node2D
 {
 
-	[Export] private Node2D territories;
+	[Export] public Node2D Territories;
 	[Export] public Godot.Collections.Array<Color> colors;
 
 	[Export] private bool clear_territories = false;
@@ -21,7 +21,7 @@ public partial class GSMap : Node2D
 	
 	public void Clear()
 	{
-		foreach ( Node n in territories.GetChildren() )
+		foreach ( Node n in Territories.GetChildren() )
 		{
 			GD.Print($"Territory {n.Name} cleared");
 			n.QueueFree();
@@ -82,7 +82,7 @@ public partial class GSMap : Node2D
 
 	public Territory GetTerritory( int id )
 	{
-		return territories.GetChildOrNull<Territory>(id);
+		return Territories.GetChildOrNull<Territory>(id);
 	}
 
 	public Rect2 GetMapRect()
@@ -92,7 +92,7 @@ public partial class GSMap : Node2D
 
 	private void ToggleTerritoryBgVisibility()
 	{
-		foreach ( Territory t in territories.GetChildren() )
+		foreach ( Territory t in Territories.GetChildren() )
 		{
 			t.ToggleBgVisible();
 		}
@@ -100,7 +100,7 @@ public partial class GSMap : Node2D
 
 	private void ToggleTerritoryMaskVisibility()
 	{
-		foreach ( Territory t in territories.GetChildren() )
+		foreach ( Territory t in Territories.GetChildren() )
 		{
 			t.ToggleMaskVisible();
 		}

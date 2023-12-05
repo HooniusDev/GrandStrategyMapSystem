@@ -5,6 +5,7 @@ public partial class Territory : Node2D
 {
 
 	[Export] private TerritoryData data;
+	[Export] private ColorRegion colorRegion;
 	[Export] private Sprite2D mask;
 	[Export] private Sprite2D bg;
 
@@ -33,6 +34,25 @@ public partial class Territory : Node2D
 		this.bg.Owner = GetTree().EditedSceneRoot;
 		Position = offset;
 		SetMeta("_edit_group_", true);
+	}
+
+	public void Create( ColorRegion colorRegion )
+	{
+		GD.Print("color region territory created");
+		this.colorRegion = colorRegion;
+		Position = colorRegion.GetPosition();
+		this.mask = new Sprite2D();
+		//this.mask = GetNode<Sprite2D>("Mask");
+		this.mask.Texture = colorRegion.GetMask();
+		this.mask.Name = "Mask";
+		this.mask.Centered = false;
+		AddChild(this.mask);
+		this.mask.Owner = GetTree().EditedSceneRoot;
+	}
+
+	public ImageTexture GetMask()
+	{
+		return colorRegion.GetMask();
 	}
 
 

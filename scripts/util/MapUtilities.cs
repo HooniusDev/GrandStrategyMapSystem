@@ -66,7 +66,7 @@ private Image bgImage;
 			{
 				Color color = colorIdImage.GetPixel( x, y );
 
-				if (color.A < .01 || isSpecialColor(color))
+				if (color.A < .01f || isSpecialColor(color))
 				{
 					continue;
 				}

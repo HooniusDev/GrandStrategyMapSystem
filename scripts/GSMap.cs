@@ -20,7 +20,7 @@ public partial class GSMap : Node2D
 	{
 		foreach ( Node n in Territories.GetChildren() )
 		{
-			GD.Print($"Territory {n.Name} cleared");
+			//GD.Print($"Territory {n.Name} cleared");
 			n.QueueFree();
 		}
 	}

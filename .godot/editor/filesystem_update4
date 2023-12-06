@@ -1,7 +1,3 @@
-res://scenes/map.tscn
-res://assets/shaders/outline.gdshader
-res://assets/shaders/territory_hover_material.tres
-res://assets/shaders/rim.gdshader
 res://scripts/data/TerritoryData.cs
 res://scripts/GSMap.cs
 res://scripts/Territory.cs
@@ -10,3 +6,7 @@ res://scripts/util/ColorRegion.cs
 res://scripts/util/Input.cs
 res://scripts/util/MapUtilities.cs
 res://scenes/fantasymap_test.tscn
+res://assets/shaders/outline.gdshader
+res://assets/shaders/territory_hover_material.tres
+res://assets/shaders/rim.gdshader
+res://scenes/map.tscn

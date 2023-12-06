@@ -4,6 +4,13 @@ using System.Linq;
 /* 
 	Replaces MapUtilities.
 	Takes advantage of ColorRegion.cs Resource to encapsulate things
+
+	IMPORTANT!!!
+	It takes 19 seconds to split the large map into regions
+	and another 11 seconds to crop them.
+	Ok..
+	Removed the BitMap Mask from ColorRegion as it did not give any benefits
+	Splitting still takes 19 seconds but cropping is done in 9 milliseconds
  */
 
 [Tool]
@@ -54,10 +61,12 @@ private Image bgImage;
 				}
 				GD.Print("Splitter running");
 				preProcess();
+ 				ulong start = Time.GetTicksMsec();
 				for ( int i = 0; i < colorsRegions.Count; i++ )
 				{
-					colorsRegions[i].cropMask(BackgroundTexture.GetImage());
+					colorsRegions[i].cropMask(bgImage);
 				}
+				GD.Print($"Cropping took: { Time.GetTicksMsec() - start}");
 				updateTerritories();
 				//map.colors = colors;
 				runSplitter = false;
@@ -108,49 +117,63 @@ private Image bgImage;
 
 	private void preProcess()
 	{
-		GD.Print("PreProcessing..");
+		ulong start = Time.GetTicksMsec();
 
 		bgImage = backgroundTexture.GetImage();
 		// Duplicate colorId
 		colorIdImage = colorIdTexture.GetImage();
 		colorIdImageCopy = colorIdImage.Duplicate() as Image;
 
-		Color prevColor = new Color();
+		int height = colorIdImage.GetHeight();
+		int width = colorIdImage.GetWidth();
 
-		for ( int y = 0; y < colorIdImage.GetHeight(); y++ )
+		int prevId = -1;
+
+		for ( int y = 0; y < height; y++ )
 		{
-			for ( int x = 0; x < colorIdImage.GetWidth(); x++ )
+			for ( int x = 0; x < width; x++ )
 			{
 				Color color = colorIdImage.GetPixel( x, y );
+				// Transparent -> do nothing
+				if (color.A < .01f )
+				{
+					continue;
+				}
 
-				// New and not special color
-				if ( GetId( color ) < 0 && !isSpecialColor(color) )
+				int id = GetId( color );
+				Color bgColor = bgImage.GetPixel(x,y);
+				// Same as last one
+				if ( id != -1 && id == prevId )
+				{
+					//colorsRegions[id].SetBit( x,y );
+					colorsRegions[id].SetPixel( x,y, bgColor );
+					
+					continue;
+				}
+
+				// id = -1, so it's unknown color and not in special colors array
+				// -> create a new ColorRegion for it
+				if ( id < 0 && !isSpecialColor(color) )
 				{
 					var region = new ColorRegion(color, colorsRegions.Count, new Vector2I(x,y), colorIdImage.GetSize());
-					region.SetBit( x,y );
+					region.SetPixel( x,y, bgColor );
 					colorsRegions.Add(region);
 				}
 				else
 				{
-					// Add the color to region
+					// It's special color so set it to previous Id of colorsRegions
 					if (isSpecialColor(color))
 					{
-						int id = GetId(prevColor);
-						colorsRegions[id].SetBit( x,y );
-						colorsRegions[id].AddSpecialLocation( new Vector2I(x,y) );
-					}
-					else
-					{
-						int id = GetId(color);
-						colorsRegions[id].SetBit( x,y );
+						colorsRegions[prevId].SetPixel( x,y, bgColor );
+						colorsRegions[prevId].AddSpecialLocation( new Vector2I(x,y) );
+						continue;
 					}
 				}
-
-				prevColor = color;
+				prevId = id;
 			}
 		}
 		GD.Print($"Found {colorsRegions.Count} Color regions.");
-
+		GD.Print($"Preprocess took: {Time.GetTicksMsec() - start}");
 	}
 
 		// Creates masked image per colorID

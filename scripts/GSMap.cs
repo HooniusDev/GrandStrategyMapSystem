@@ -6,20 +6,17 @@ public partial class GSMap : Node2D
 {
 
 	[Export] public Node2D Territories;
+	[Export] private ColorIDMap colorIdSystem;
+
 	[Export] public Godot.Collections.Array<Color> colors;
 
-	[Export] private bool clear_territories = false;
+	[ExportCategory("Tool")]
+	[Export] private bool clearTerritories = false;
 	[Export] private bool toggleBackgrounds = false;
 	[Export] private bool toggleMasks = false;
 
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		//GD.Print("Helou");
-	}
 	
-	public void Clear()
+	public void ClearTerritories()
 	{
 		foreach ( Node n in Territories.GetChildren() )
 		{
@@ -33,12 +30,12 @@ public partial class GSMap : Node2D
 	{
 		if (Engine.IsEditorHint())
 		{
-			if (clear_territories )
+			if (clearTerritories )
 			{
 				GD.Print("clear_territories");
 
-				Clear();
-				clear_territories = false;
+				ClearTerritories();
+				clearTerritories = false;
 			}
 			if (toggleBackgrounds == true)
 			{
@@ -55,34 +52,44 @@ public partial class GSMap : Node2D
 
 	private int getId( Color color )
 	{
-		if (color.A < 0.01)
-			return -1;
-
-		for ( int index = 0; index < colors.Count; index++)
-		{
-			if (colors[index].IsEqualApprox(color))
-				return index;
-		}
-		return -1;
+		return colorIdSystem.GetId(color);
 	}
 
 	public int getId( Vector2 pos )
 	{
-
 	Vector2 local = GetLocalMousePosition();
 	Rect2 rect = GetNode<Sprite2D>("MapColorID").GetRect();
-	if ( rect.HasPoint( pos ) )
+	if ( rect.HasPoint( local ) )
 	{
-		Color color = GetNode<Sprite2D>("MapColorID").Texture.GetImage().GetPixelv((Vector2I)local );
+		//GD.Print($"position {local} ");
+		Color color = colorIdSystem.GetColor( local );
 		return getId( color );
 	}
 
 	return -1;
 	}
 
+	public Territory GetTerritoryAtMouse( )
+	{
+		Vector2 local = GetLocalMousePosition();
+		Color color = colorIdSystem.GetColor((Vector2I)local);
+		int id = colorIdSystem.GetId( color );
+		return GetTerritory(id);
+	}
+
 	public Territory GetTerritory( int id )
 	{
 		return Territories.GetChildOrNull<Territory>(id);
+	}
+
+	public Territory GetTerritory( Color color )
+	{
+		foreach (Territory t in Territories.GetChildren())
+		{
+			if (t.isColor(color))
+				return t;
+		}
+		return null;
 	}
 
 	public Rect2 GetMapRect()

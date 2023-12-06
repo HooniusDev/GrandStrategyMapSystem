@@ -4,58 +4,90 @@ using System;
 public partial class Territory : Node2D
 {
 
-	[Export] private TerritoryData data;
-	[Export] private ColorRegion colorRegion;
-	[Export] private Sprite2D mask;
-	[Export] private Sprite2D bg;
+	[Export] public int Id { get; private set; } = -1;
+	[Export] public Color ColorId { get; private set; } = Colors.Transparent;
 
+	[Export] private TerritoryData data;
+
+	[Export] private Sprite2D mask { get; set; }
+	[Export] private Sprite2D bg { get; set; }
+
+	[ExportCategory("Tool")]
 	[Export] private bool toggleMask = false;
 	[Export] private bool toggleBg = false;
 
-
-	// Called when the node enters the scene tree for the first time.
-	public void Create( int id, Image mask, Image bg, Color color, Vector2I offset )
+/// <summary>
+/// If needed creates Sprite2D nodes for mask and bg Texture2D's.
+/// Raises error if 'Id' or 'ColorId' are different from
+/// provided ones.
+/// </summary>
+	public void SetData( int id, Color colorId, Vector2I position, 
+							Texture2D maskTexture, Texture2D bgTexture )
 	{
-		GD.Print($"{Name} Created");
-		data = new( id, mask, bg, color );
-		this.mask = new Sprite2D();
-		//this.mask = GetNode<Sprite2D>("Mask");
-		this.mask.Texture = ImageTexture.CreateFromImage( mask );
-		this.mask.Name = "Mask";
-		this.mask.Centered = false;
-		AddChild(this.mask);
-		this.mask.Owner = GetTree().EditedSceneRoot;
-		this.bg = new Sprite2D();
-		//this.bg = GetNode<Sprite2D>("Bg");
-		this.bg.Texture = ImageTexture.CreateFromImage( bg );
-		this.bg.Name = "Bg";
-		this.bg.Centered = false;
-		AddChild(this.bg);
-		this.bg.Owner = GetTree().EditedSceneRoot;
-		Position = offset;
-		SetMeta("_edit_group_", true);
+		//Create the Sprite2D Nodes if First Call
+		if (!IsInstanceValid(mask))
+		{
+			mask = new Sprite2D
+			{
+				Centered = false,
+				Visible = false,
+				Name = "Mask"
+			};
+			AddChild(mask);
+			mask.Owner = GetTree().EditedSceneRoot; // Editor Scripts need this line
+		}
+
+		if (!IsInstanceValid(bg))
+			{
+			bg = new Sprite2D
+			{
+				Centered = false,
+				Visible = false,
+				Name = "Bg"
+			};
+			AddChild(bg);
+			bg.Owner = GetTree().EditedSceneRoot;
+		}
+
+		mask.Texture = maskTexture;
+		bg.Texture = bgTexture;
+
+		if ( Id != -1 && Id != id )
+		{
+			 GD.PrintErr( $"{Name} SetData ID {Id} mismatches {id}!" );
+		}
+		if ( ColorId != Colors.Transparent && ColorId != colorId )
+		{
+			 GD.PrintErr( $"{Name} SetData ColorId {ColorId} mismatches {colorId}!" );
+		}
+
+		Id = id;
+		ColorId = colorId;
+		Position = position;
+
+		Name = "Territory" + Id.ToString();
+		SetMeta("_edit_group_", true); // Set the nodes as grouped in editor
+	}
+	
+/// <summary>
+/// Get Mask Texture2D of this Territory.
+/// </summary>
+/// <returns>Returns Texture2D from Mask Node</returns>
+	public Texture2D GetMask()
+	{
+		return mask.Texture;
 	}
 
-	public void Create( ColorRegion colorRegion )
+/// <summary>
+/// Checks if ColorId matches parameter color
+/// </summary>
+/// <param name="color"></param>
+/// <returns>Returns true if colors match</returns>
+	public bool isColor( Color color )
 	{
-		GD.Print("color region territory created");
-		this.colorRegion = colorRegion;
-		Position = colorRegion.GetPosition();
-		this.mask = new Sprite2D();
-		//this.mask = GetNode<Sprite2D>("Mask");
-		this.mask.Texture = colorRegion.GetMask();
-		this.mask.Name = "Mask";
-		this.mask.Centered = false;
-		AddChild(this.mask);
-		this.mask.Owner = GetTree().EditedSceneRoot;
+		// should probably check for Alpha component 
+		return ColorId.IsEqualApprox(color);
 	}
-
-	public ImageTexture GetMask()
-	{
-		return colorRegion.GetMask();
-	}
-
-
 
 	public void ToggleMaskVisible( )
 	{
@@ -67,12 +99,7 @@ public partial class Territory : Node2D
 		bg.Visible = !bg.Visible;
 	}
 
-	public void UpdateData( int id, Image mask, Image bg, Color color, Vector2I offset )
-	{
-		//GD.Print($"{Name} Updating.");
-		data.Update(id, mask, bg, color);
-		Position = offset;
-	}
+
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)

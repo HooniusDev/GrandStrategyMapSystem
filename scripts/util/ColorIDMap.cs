@@ -21,7 +21,7 @@ private Texture2D colorIdTexture;
 		UpdateConfigurationWarnings();
 	}
 }
-private Image colorIdImage;
+public Image colorIdImage;
 private Image colorIdImageCopy;
 private Texture2D backgroundTexture;
 [Export] public Texture2D BackgroundTexture
@@ -81,25 +81,21 @@ private Image bgImage;
 		for ( int i = 0; i < colorsRegions.Count; i++ )
 		{
 			Territory territory = GetParent<GSMap>().GetTerritory(i);
-			var root = GetTree().EditedSceneRoot;
 			if ( !IsInstanceValid(territory) )
 			{
+				// Territory should be able to set these itself
 				territory = new Territory();
-				territory.Name = "Territory" + i.ToString();
 				GetParent<GSMap>().Territories.AddChild(territory);
 				territory.Owner = GetTree().EditedSceneRoot;
 
-				//PackedScene scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
-				//territory = scene.Instantiate<Territory>();
-				//territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
-				GD.Print($"{territory.Name} Created.");
-				territory.Create( colorsRegions[i] );
-			}
-			else 
-			{
-				GD.Print($"{territory.Name} Updating.");
-				//territory.UpdateData(i, masks[i], backgrounds[i], colors[i], offsets[i]);
-				
+				//GD.Print($"{territory.Name} Created.");
+				territory.SetData(
+					 i,
+					 colorsRegions[i].Color,
+					 colorsRegions[i].GetPosition(),
+					 colorsRegions[i].GetMask(),
+					 colorsRegions[i].GetBg()
+					 );
 			}
 		}
 	}
@@ -107,7 +103,6 @@ private Image bgImage;
 	private void clear()
 	{
 		colorsRegions = new();
-
 		colorIdImageCopy = null;
 	}
 
@@ -129,7 +124,7 @@ private Image bgImage;
 				Color color = colorIdImage.GetPixel( x, y );
 
 				// New and not special color
-				if ( getId( color ) < 0 && !isSpecialColor(color) )
+				if ( GetId( color ) < 0 && !isSpecialColor(color) )
 				{
 					var region = new ColorRegion(color, colorsRegions.Count, new Vector2I(x,y), colorIdImage.GetSize());
 					region.SetBit( x,y );
@@ -140,13 +135,13 @@ private Image bgImage;
 					// Add the color to region
 					if (isSpecialColor(color))
 					{
-						int id = getId(prevColor);
+						int id = GetId(prevColor);
 						colorsRegions[id].SetBit( x,y );
 						colorsRegions[id].AddSpecialLocation( new Vector2I(x,y) );
 					}
 					else
 					{
-						int id = getId(color);
+						int id = GetId(color);
 						colorsRegions[id].SetBit( x,y );
 					}
 				}
@@ -241,7 +236,7 @@ private Image bgImage;
 	
 	}
 
-	private int getId( Color color )
+	public int GetId( Color color )
 	{
 		if (color.A < 0.01)
 			return -1;
@@ -252,6 +247,11 @@ private Image bgImage;
 				return index;
 		}
 		return -1;
+	}
+
+	public Color GetColor( Vector2 pos )
+	{
+		return colorIdTexture.GetImage().GetPixel( (int) pos.X, (int) pos.Y );
 	}
 
     private bool isSpecialColor( Color color )

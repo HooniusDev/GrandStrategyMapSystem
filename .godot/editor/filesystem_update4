@@ -9,3 +9,4 @@ res://scripts/util/ColorIDMap.cs
 res://scripts/util/ColorRegion.cs
 res://scripts/util/Input.cs
 res://scripts/util/MapUtilities.cs
+res://scenes/fantasymap_test.tscn

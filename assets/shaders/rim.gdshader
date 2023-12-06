@@ -25,7 +25,7 @@ void fragment() {
     outline_alpha = min(outline_alpha, 1.0);
 
     if (UV.x > 1.0 || UV.x < 0.0 || UV.y > 1.0 || UV.y < 0.0) {
-        color = vec4(0);
+        //color = vec4(0);
     } else {
         color = texture(TEXTURE, UV);
 		if (color.a < 0.1) discard;

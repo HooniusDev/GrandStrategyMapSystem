@@ -112,13 +112,13 @@ private Image bgImage;
 
 				//PackedScene scene = GD.Load<PackedScene>("res://scenes/territory.tscn");
 				//territory = scene.Instantiate<Territory>();
-				territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
+				//territory.Create( i, masks[i], backgrounds[i], colors[i], offsets[i] );	
 				//GD.Print($"{territory.Name} Created.");
 			}
 			else 
 			{
 				//GD.Print($"{territory.Name} Updating.");
-				territory.UpdateData(i, masks[i], backgrounds[i], colors[i], offsets[i]);
+				//territory.UpdateData(i, masks[i], backgrounds[i], colors[i], offsets[i]);
 				
 			}
 		}

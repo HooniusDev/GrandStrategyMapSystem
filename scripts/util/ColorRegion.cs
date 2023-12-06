@@ -60,9 +60,14 @@ public partial class ColorRegion : Resource
         return rect.Position;
     } 
 
-    public ImageTexture GetMask()
+    public Texture2D GetMask()
     {
         return ImageTexture.CreateFromImage( mask );
+    }
+
+    public Texture2D GetBg()
+    {
+        return ImageTexture.CreateFromImage( bg );
     }
 
     public void cropMask( Image source )

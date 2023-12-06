@@ -4,5 +4,5 @@
 
 [resource]
 shader = ExtResource("1_u3qxh")
-shader_parameter/outline_color = Color(0.952941, 0.952941, 0.952941, 0.627451)
-shader_parameter/fill_color = Color(0.690196, 0.690196, 0.690196, 0.360784)
+shader_parameter/outline_color = Color(1, 1, 1, 0.541176)
+shader_parameter/fill_color = Color(0.270588, 0.270588, 0.270588, 0.278431)

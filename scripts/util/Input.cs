@@ -21,8 +21,13 @@ public partial class Input : StaticBody2D
 				return;
 			//	#GameEvents.hover_territory_changed.emit( new_hover_id )
 			//print( new_hover_id )
-			Territory enterHover = map.GetTerritory(newHoverId); //world_map.get_territory_by_id(new_hover_id)
-			GD.Print(enterHover.Name);
+			Territory enterHover = map.GetTerritoryAtMouse(); //world_map.get_territory_by_id(new_hover_id)
+			GD.Print($"Enter Hover: {enterHover.Name}");
+			Sprite2D hoverSprite = GetNode<Sprite2D>("TerritoryHover");
+			hoverSprite.Position = enterHover.Position;
+
+			hoverSprite.Texture = enterHover.GetMask();
+/* 			GD.Print(enterHover.Name);
 			if ( IsInstanceValid( enterHover ))
 			{
 				enterHover.GetNode<Sprite2D>("Mask").Visible = true;
@@ -35,7 +40,7 @@ public partial class Input : StaticBody2D
 				exitHover.GetNode<Sprite2D>("Mask").Visible = false;
 				exitHover.GetNode<Sprite2D>("Mask").Material = null;
 				exitHover.GetNode<Sprite2D>("Mask").ZIndex = 1;
-			}
+			} */
 			hoverId = newHoverId;
 		}
     }

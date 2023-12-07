@@ -1,3 +1,10 @@
+res://scenes/fantasymap_test.tscn
+res://assets/shaders/outline.gdshader
+res://assets/shaders/territory_hover_material.tres
+res://assets/shaders/rim.gdshader
+res://scenes/map.tscn
+res://scenes/Locations/ruins.tscn
+res://Ruins.cs
 res://scripts/data/TerritoryData.cs
 res://scripts/GSMap.cs
 res://scripts/Territory.cs
@@ -5,8 +12,6 @@ res://scripts/util/ColorIDMap.cs
 res://scripts/util/ColorRegion.cs
 res://scripts/util/Input.cs
 res://scripts/util/MapUtilities.cs
-res://scenes/fantasymap_test.tscn
-res://assets/shaders/outline.gdshader
-res://assets/shaders/territory_hover_material.tres
-res://assets/shaders/rim.gdshader
-res://scenes/map.tscn
+res://scenes/Locations/Ruins.cs
+res://scenes/Units/unit.tscn
+res://scenes/Units/BaseUnit.cs

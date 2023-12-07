@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class Input : StaticBody2D
 {
@@ -14,34 +15,34 @@ public partial class Input : StaticBody2D
     {
 		if (@event is InputEventMouseMotion)
 		{
-			//base._InputEvent(viewport, @event, shapeIdx);
 			int newHoverId = map.getId(Position);
-			GD.Print($"new hover id: {newHoverId}");
-			if (newHoverId == hoverId)
+
+			if (newHoverId == hoverId || newHoverId == -1)
 				return;
-			//	#GameEvents.hover_territory_changed.emit( new_hover_id )
-			//print( new_hover_id )
+
 			Territory enterHover = map.GetTerritoryAtMouse(); //world_map.get_territory_by_id(new_hover_id)
-			GD.Print($"Enter Hover: {enterHover.Name}");
+
+			//GD.Print($"Enter Hover: {enterHover.Name}");
+
 			Sprite2D hoverSprite = GetNode<Sprite2D>("TerritoryHover");
 			hoverSprite.Position = enterHover.Position;
-
 			hoverSprite.Texture = enterHover.GetMask();
-/* 			GD.Print(enterHover.Name);
-			if ( IsInstanceValid( enterHover ))
-			{
-				enterHover.GetNode<Sprite2D>("Mask").Visible = true;
-				enterHover.GetNode<Sprite2D>("Mask").Material = HOVER_MATERIAL;
-				enterHover.GetNode<Sprite2D>("Mask").ZIndex = 10;
-			}
-			Territory exitHover = map.GetTerritory(hoverId); //world_map.get_territory_by_id(new_hover_id)
-			if ( IsInstanceValid( exitHover ))
-			{
-				exitHover.GetNode<Sprite2D>("Mask").Visible = false;
-				exitHover.GetNode<Sprite2D>("Mask").Material = null;
-				exitHover.GetNode<Sprite2D>("Mask").ZIndex = 1;
-			} */
+
 			hoverId = newHoverId;
+		}
+		if ( @event is InputEventMouseButton mouseButtonEvent )
+		{
+			//GD.Print( $"{Name} Mouse Button Event!" ); 
+			if ( mouseButtonEvent.ButtonIndex is MouseButton.Left && ! mouseButtonEvent.Pressed )
+			{
+				GD.Print($"Mouse left click at {mouseButtonEvent.GlobalPosition}");
+				BaseUnit unit = (BaseUnit) GetTree().GetNodesInGroup("selected").First();
+				if (IsInstanceValid(unit))
+				{
+					unit.SetMoveTarget( GetGlobalMousePosition() );
+				}
+			}
+
 		}
     }
 

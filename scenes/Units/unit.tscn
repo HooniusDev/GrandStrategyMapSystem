@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjvfcmhogbnho"]
+
+[ext_resource type="Script" path="res://scenes/Units/BaseUnit.cs" id="1_ai7c0"]
+[ext_resource type="Texture2D" uid="uid://bp7sma7nnncmv" path="res://assets/sprites/fantasy_template/legends.png" id="1_sedok"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0rbh3"]
+radius = 7.07107
+
+[node name="Unit" type="CharacterBody2D" groups=["selected"]]
+disable_mode = 1
+collision_mask = 0
+input_pickable = true
+motion_mode = 1
+platform_on_leave = 2
+script = ExtResource("1_ai7c0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_0rbh3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_sedok")
+region_enabled = true
+region_rect = Rect2(18, 49, 12, 15)
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 9.0
+offset_top = -11.0
+offset_right = 49.0
+offset_bottom = 12.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -2
+theme_override_constants/shadow_offset_y = 2
+text = "Unit"
+vertical_alignment = 1
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 4.0
+target_desired_distance = 4.0
+path_max_distance = 20.0
+debug_enabled = true
+debug_path_custom_color = Color(0.721569, 0, 0.835294, 1)
+debug_path_custom_point_size = 3.0
+debug_path_custom_line_width = 1.0

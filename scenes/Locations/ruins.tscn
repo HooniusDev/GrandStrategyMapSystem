@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://dol0ly81ygofp"]
+
+[ext_resource type="Script" path="res://scenes/Locations/Ruins.cs" id="1_5x78k"]
+[ext_resource type="Texture2D" uid="uid://bp7sma7nnncmv" path="res://assets/sprites/fantasy_template/legends.png" id="2_vl23i"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_64tmq"]
+radius = 4.12311
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pc25h"]
+size = Vector2(17, 14)
+
+[sub_resource type="FontVariation" id="FontVariation_8feef"]
+
+[node name="Ruins Of Doom" type="Node2D" node_paths=PackedStringArray("area2D")]
+script = ExtResource("1_5x78k")
+area2D = NodePath("Area2D")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+
+[node name="UnitCollider" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_64tmq")
+
+[node name="MouseCollider" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_pc25h")
+disabled = true
+
+[node name="Legend" type="Sprite2D" parent="."]
+texture = ExtResource("2_vl23i")
+region_enabled = true
+region_rect = Rect2(35, 34, 10, 13)
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -28.0
+offset_top = 1.0
+offset_right = 27.0
+offset_bottom = 23.0
+grow_horizontal = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.552941, 0.552941, 0.552941, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = SubResource("FontVariation_8feef")
+theme_override_font_sizes/font_size = 15
+text = "Ruins
+"
+horizontal_alignment = 1
+vertical_alignment = 1

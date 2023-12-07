@@ -79,7 +79,7 @@ public partial class GSMap : Node2D
 
 	public Territory GetTerritory( int id )
 	{
-		return Territories.GetChildOrNull<Territory>(id);
+		return Territories.GetChild<Territory>(id);
 	}
 
 	public Territory GetTerritory( Color color )

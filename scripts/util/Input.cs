@@ -20,7 +20,7 @@ public partial class Input : StaticBody2D
 			if (newHoverId == hoverId || newHoverId == -1)
 				return;
 
-			Territory enterHover = map.GetTerritoryAtMouse(); //world_map.get_territory_by_id(new_hover_id)
+			Territory enterHover = map.GetTerritory(newHoverId); //world_map.get_territory_by_id(new_hover_id)
 
 			//GD.Print($"Enter Hover: {enterHover.Name}");
 

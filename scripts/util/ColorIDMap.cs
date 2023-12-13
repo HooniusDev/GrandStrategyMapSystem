@@ -106,6 +106,11 @@ private Image bgImage;
 					 colorsRegions[i].GetBg()
 					 );
 			}
+			else
+			{
+				territory.SetMask( colorsRegions[i].GetMask() );
+				territory.SetBg( colorsRegions[i].GetBg() );
+			}
 		}
 	}
 
@@ -143,11 +148,10 @@ private Image bgImage;
 				int id = GetId( color );
 				Color bgColor = bgImage.GetPixel(x,y);
 				// Same as last one
-				if ( id != -1 && id == prevId )
+				if ( id != -1 )
 				{
-					//colorsRegions[id].SetBit( x,y );
 					colorsRegions[id].SetPixel( x,y, bgColor );
-					
+					prevId = id;
 					continue;
 				}
 
@@ -164,8 +168,11 @@ private Image bgImage;
 					// It's special color so set it to previous Id of colorsRegions
 					if (isSpecialColor(color))
 					{
+						GD.Print($"Found special color count: {colorsRegions.Count} prevId{prevId}.");
 						colorsRegions[prevId].SetPixel( x,y, bgColor );
+						colorIdImageCopy.SetPixel( x,y, colorIdImage.GetPixel( x-1, y ) );
 						colorsRegions[prevId].AddSpecialLocation( new Vector2I(x,y) );
+						
 						continue;
 					}
 				}

@@ -65,8 +65,18 @@ public partial class Territory : Node2D
 		ColorId = colorId;
 		Position = position;
 
-		Name = "Territory" + Id.ToString();
+		//Name = "Territory" + Id.ToString();
 		SetMeta("_edit_group_", true); // Set the nodes as grouped in editor
+	}
+
+	public void SetMask( Texture2D texture )
+	{
+		mask.Texture = texture;
+	}
+
+	public void SetBg( Texture2D texture )
+	{
+		bg.Texture = texture;
 	}
 	
 /// <summary>
